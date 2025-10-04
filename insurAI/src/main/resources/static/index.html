@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Selection App - Authentication</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { max-width: 400px; margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        input { width: 100%; padding: 8px; margin: 5px 0; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .response { margin: 10px 0; padding: 10px; background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>Job Selection App - User Authentication</h1>
+    
+    <div class="form-container">
+        <h3>Register</h3>
+        <input type="text" id="regFullName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <div id="regResponse" class="response"></div>
+    </div>
+
+    <div class="form-container">
+        <h3>Login</h3>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div id="loginResponse" class="response"></div>
+    </div>
+
+    <div class="form-container">
+        <h3>Forgot Password</h3>
+        <input type="email" id="forgotEmail" placeholder="Email">
+        <button onclick="forgotPassword()">Send Reset Email</button>
+        <div id="forgotResponse" class="response"></div>
+    </div>
+
+    <script>
+        async function register() {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fullName: document.getElementById('regFullName').value,
+                    email: document.getElementById('regEmail').value,
+                    password: document.getElementById('regPassword').value
+                })
+            });
+            const result = await response.json();
+            document.getElementById('regResponse').innerText = result.message;
+        }
+
+        async function login() {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: document.getElementById('loginEmail').value,
+                    password: document.getElementById('loginPassword').value
+                })
+            });
+            const result = await response.json();
+            document.getElementById('loginResponse').innerText = result.message;
+            if (result.token) {
+                localStorage.setItem('token', result.token);
+            }
+        }
+
+        async function forgotPassword() {
+            const email = document.getElementById('forgotEmail').value;
+            const response = await fetch(`/api/auth/forgot-password?email=${email}`, {
+                method: 'POST'
+            });
+            const result = await response.text();
+            document.getElementById('forgotResponse').innerText = result;
+        }
+    </script>
+</body>
+</html>
