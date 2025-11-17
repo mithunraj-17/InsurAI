@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Login = ({ setAuth }) => {
@@ -9,6 +9,7 @@ const Login = ({ setAuth }) => {
   })
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     setFormData({
@@ -17,14 +18,35 @@ const Login = ({ setAuth }) => {
     })
   }
 
+  const navigate = useNavigate()
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', formData)
+      const response = await axios.post('http://localhost:8080/api/auth/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
       localStorage.setItem('token', response.data.token)
+      localStorage.setItem('userRole', response.data.role)
+      localStorage.setItem('userId', response.data.userId)
+      localStorage.setItem('fullName', response.data.fullName)
+      localStorage.setItem('email', response.data.email)
       setAuth(true)
       setMessage('Login successful!')
+      
+      setTimeout(() => {
+        if (response.data.role === 'CUSTOMER') {
+          navigate('/customer-dashboard')
+        } else if (response.data.role === 'AGENT') {
+          navigate('/agent-dashboard')
+        } else if (response.data.role === 'ADMIN') {
+          navigate('/admin-dashboard')
+        }
+      }, 1000)
     } catch (error) {
       setMessage(error.response?.data?.message || 'Login failed')
     }
@@ -58,15 +80,27 @@ const Login = ({ setAuth }) => {
         </div>
 
         <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            className="form-input"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem'}}>
+            <label>Password</label>
+            <Link to="/forgot-password" style={{fontSize: '0.8rem', color: '#4299e1', textDecoration: 'none'}}>Forgot password?</Link>
+          </div>
+          <div className="password-input-container">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              👁
+            </button>
+          </div>
         </div>
 
         <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -74,10 +108,11 @@ const Login = ({ setAuth }) => {
         </button>
       </form>
 
-      <div className="auth-links">
-        <Link to="/forgot-password">Forgot your password?</Link>
-        <div className="divider">Don't have an account?</div>
-        <Link to="/register">Create Account</Link>
+      <div className="auth-footer">
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem'}}>
+          <span style={{color: '#718096'}}>Don't have an account?</span>
+          <Link to="/register" style={{color: '#4299e1', textDecoration: 'none', fontWeight: '500'}}>Create Account</Link>
+        </div>
       </div>
     </div>
   )

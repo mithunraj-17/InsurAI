@@ -43,7 +43,18 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/availability/**").permitAll()
+                .requestMatchers("/api/customer/**").permitAll()
+                .requestMatchers("/api/agent/**").permitAll()
+                .requestMatchers("/api/appointments/**").permitAll()
+                .requestMatchers("/api/policies/**").permitAll()
+                .requestMatchers("/api/notifications/**").permitAll()
+                .requestMatchers("/api/admin/**").permitAll()
+                .requestMatchers("/api/insurance/**").permitAll()
+                .requestMatchers("/api/test/**").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers("/error").permitAll()
+                .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()
             )
             .build();
