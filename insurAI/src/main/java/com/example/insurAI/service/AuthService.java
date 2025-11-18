@@ -186,4 +186,23 @@ public class AuthService {
 
         return "Password reset successful";
     }
+    
+    public void updateProfile(Long userId, java.util.Map<String, String> profileData) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        if (profileData.containsKey("fullName")) {
+            user.setFullName(profileData.get("fullName"));
+        }
+        
+        if (profileData.containsKey("email")) {
+            String newEmail = profileData.get("email");
+            if (!newEmail.equals(user.getEmail()) && userRepository.findByEmail(newEmail).isPresent()) {
+                throw new RuntimeException("Email already exists");
+            }
+            user.setEmail(newEmail);
+        }
+        
+        userRepository.save(user);
+    }
 }

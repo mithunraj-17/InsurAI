@@ -3,7 +3,7 @@ package com.example.insurAI.controller;
 import com.example.insurAI.dto.AvailabilityRequest;
 import com.example.insurAI.entity.AgentAvailability;
 import com.example.insurAI.entity.Appointment;
-import com.example.insurAI.entity.AppointmentStatus;
+
 import com.example.insurAI.service.AppointmentService;
 import com.example.insurAI.service.AvailabilityService;
 import org.springframework.beans.factory.annotation.Autowired;

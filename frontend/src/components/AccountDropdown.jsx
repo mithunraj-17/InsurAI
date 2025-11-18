@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import ProfileSettings from './ProfileSettings'
 
 const AccountDropdown = ({ userType = 'USER', onLogout }) => {
   const [showAccountMenu, setShowAccountMenu] = useState(false)
+  const [showProfileSettings, setShowProfileSettings] = useState(false)
   const [userInfo, setUserInfo] = useState({
     name: localStorage.getItem('fullName') || `${userType} User`,
     email: localStorage.getItem('email') || `${userType.toLowerCase()}@insurai.com`,
@@ -42,7 +44,7 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           borderRadius: '12px',
-          color: userType === 'ADMIN' ? 'var(--gray-700)' : 'white',
+          color: userType === 'ADMIN' ? 'var(--gray-700)' : '#1f2937',
           cursor: 'pointer',
           transition: 'all 0.2s'
         }}
@@ -51,7 +53,10 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
           width: '32px',
           height: '32px',
           borderRadius: '50%',
-          background: getAvatarColor(),
+          background: localStorage.getItem('profilePicture') ? 
+            `url(${localStorage.getItem('profilePicture')})` : getAvatarColor(),
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -59,7 +64,7 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
           fontWeight: '600',
           fontSize: '0.875rem'
         }}>
-          {userInfo.name.charAt(0).toUpperCase()}
+          {!localStorage.getItem('profilePicture') && userInfo.name.charAt(0).toUpperCase()}
         </div>
         <div style={{textAlign: 'left'}}>
           <div style={{fontWeight: '600', fontSize: '0.875rem'}}>{userInfo.name}</div>
@@ -87,7 +92,10 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
           </div>
           <div style={{padding: '0.5rem'}}>
             <button 
-              onClick={() => setShowAccountMenu(false)}
+              onClick={() => {
+                setShowAccountMenu(false)
+                setShowProfileSettings(true)
+              }}
               style={{
                 width: '100%',
                 padding: '0.75rem 1rem',
@@ -104,7 +112,7 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
               onMouseEnter={(e) => e.target.style.background = 'var(--gray-50)'}
               onMouseLeave={(e) => e.target.style.background = 'transparent'}
             >
-              👤 Account Settings
+              👤 Profile Settings
             </button>
             <button 
               onClick={() => setShowAccountMenu(false)}
@@ -170,6 +178,10 @@ const AccountDropdown = ({ userType = 'USER', onLogout }) => {
             </button>
           </div>
         </div>
+      )}
+      
+      {showProfileSettings && (
+        <ProfileSettings onClose={() => setShowProfileSettings(false)} />
       )}
     </div>
   )

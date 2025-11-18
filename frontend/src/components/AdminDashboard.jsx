@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PolicyApproval from './PolicyApproval'
 import AccountDropdown from './AccountDropdown'
+import VoiceChatbot from './VoiceChatbot'
 import './ModernUI.css'
 
 const AdminDashboard = () => {
@@ -415,6 +416,8 @@ const AdminDashboard = () => {
           )}
         </div>
       </div>
+      
+      <VoiceChatbot />
     </div>
   )
 }

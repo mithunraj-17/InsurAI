@@ -31,7 +31,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className={`app ${!isAuthenticated ? 'auth' : ''}`}>
         <Routes>
           <Route path="/login" element={!isAuthenticated ? <Login setAuth={setIsAuthenticated} /> : <Navigate to={getDashboardRoute()} />} />

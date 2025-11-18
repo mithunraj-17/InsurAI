@@ -36,4 +36,10 @@ public class AppointmentController {
         appointmentService.createAppointment(request);
         return ResponseEntity.ok("Appointment created successfully");
     }
+
+    @GetMapping("/available-slots")
+    public ResponseEntity<List<String>> getAvailableSlots(@RequestParam Long agentId) {
+        List<String> slots = appointmentService.getAvailableSlots(agentId);
+        return ResponseEntity.ok(slots);
+    }
 }

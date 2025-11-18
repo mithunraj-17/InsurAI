@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AccountDropdown from './AccountDropdown'
+import VoiceChatbot from './VoiceChatbot'
 import AgentAvailability from './AgentAvailability'
 import PolicyManagement from './PolicyManagement'
 import ApplicationReview from './ApplicationReview'
 import AppointmentManagement from './AppointmentManagement'
+import AgentAnalytics from './AgentAnalytics'
 
 const AgentDashboard = () => {
   const [appointments, setAppointments] = useState([])
@@ -123,9 +125,14 @@ const AgentDashboard = () => {
             <ApplicationReview />
           )}
 
+          {activeTab === 'analytics' && (
+            <AgentAnalytics agentId={localStorage.getItem('userId')} />
+          )}
 
         </div>
       </div>
+      
+      <VoiceChatbot />
     </div>
   )
 }

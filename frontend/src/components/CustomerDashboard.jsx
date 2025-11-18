@@ -6,6 +6,7 @@ import AppointmentScheduling from './AppointmentScheduling'
 import NotificationPanel from './NotificationPanel'
 import ClaimForm from './ClaimForm'
 import AccountDropdown from './AccountDropdown'
+import VoiceChatbot from './VoiceChatbot'
 
 const CustomerDashboard = () => {
   const [policies, setPolicies] = useState([])
@@ -121,8 +122,18 @@ const CustomerDashboard = () => {
                       <p><strong>Status:</strong> {application.status}</p>
                       <p><strong>Applied:</strong> {new Date(application.applicationDate).toLocaleDateString()}</p>
                       <p><strong>Premium:</strong> ₹{application.policy.premium}</p>
-                      {application.status === 'REJECTED' && application.reason && (
-                        <p><strong>Reason:</strong> {application.reason}</p>
+                      {application.status === 'REJECTED' && application.rejectionReason && (
+                        <div style={{
+                          backgroundColor: '#fef2f2',
+                          border: '1px solid #fecaca',
+                          borderRadius: '0.375rem',
+                          padding: '0.75rem',
+                          marginTop: '0.75rem'
+                        }}>
+                          <p style={{ margin: 0, color: '#dc2626' }}>
+                            <strong>❌ Rejection Reason:</strong> {application.rejectionReason}
+                          </p>
+                        </div>
                       )}
                       <div className="status-badge" style={{
                         backgroundColor: application.status === 'APPROVED' ? '#10b981' : 
@@ -245,6 +256,8 @@ const CustomerDashboard = () => {
           />
         )}
       </div>
+      
+      <VoiceChatbot />
     </div>
   )
 }

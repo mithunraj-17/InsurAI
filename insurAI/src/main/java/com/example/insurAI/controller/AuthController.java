@@ -131,6 +131,15 @@ public class AuthController {
         List<User> agents = userRepository.findByRole(Role.AGENT);
         return ResponseEntity.ok(agents);
     }
-
+    
+    @PutMapping("/profile/{userId}")
+    public ResponseEntity<String> updateProfile(@PathVariable Long userId, @RequestBody java.util.Map<String, String> profileData) {
+        try {
+            authService.updateProfile(userId, profileData);
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

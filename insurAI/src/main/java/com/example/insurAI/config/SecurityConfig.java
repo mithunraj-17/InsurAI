@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/notifications/**").permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
                 .requestMatchers("/api/insurance/**").permitAll()
+                .requestMatchers("/api/chatbot/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers("/error").permitAll()

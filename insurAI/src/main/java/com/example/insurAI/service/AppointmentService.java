@@ -125,4 +125,10 @@ public class AppointmentService {
         
         appointmentRepository.save(appointment);
     }
+    
+    public List<String> getAvailableSlots(Long agentId) {
+        return List.of(
+            "09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"
+        );
+    }
 }
